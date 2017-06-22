@@ -1,16 +1,20 @@
-document.addEventListener("DOMContentLoaded", function(event) { 
-    //do work
+document.addEventListener("DOMContentLoaded", function(event) {
+    //launch component 
     init_pixi_video();
 });
 
-function init_pixi_video(){
+function init_pixi_video() {
+    var video_w = 16;
+    var video_h = 9;
+    var ratio = video_h / video_w;
 
-    var app = new PIXI.Application(1920, 1080, { transparent: true });
-    document.body.appendChild(app.view);
+    var app = new PIXI.Application(window.innerWidth, Math.trunc(720 * ratio), { transparent: true });
+    document.getElementById("cmp-video-mask").appendChild(app.view);
+
 
     app.stage.interactive = true;
 
-    this.renderer = PIXI.autoDetectRenderer(1920, 1080, {antialias:true});
+    this.renderer = PIXI.autoDetectRenderer(window.innerWidth, Math.trunc(720 * ratio), { antialias: true });
 
     // Create play button that can be used to trigger the video
     var button = new PIXI.Graphics()
@@ -52,8 +56,8 @@ function init_pixi_video(){
         // create a video texture from a path
         var video = document.createElement("video");
         video.preload = "auto";
-        video.loop = true;              // enable looping
-        video.src = "video/optimus.mp4";
+        video.loop = true; // enable looping
+        video.src = "video/optimus_720.mp4";
 
         var texture = PIXI.Texture.fromVideo(video);
 
@@ -65,13 +69,15 @@ function init_pixi_video(){
 
         container.addChild(videoSprite);
         app.stage.addChild(container);
-        
+
         // let's create a moving shape
         var thing = new PIXI.Graphics();
         app.stage.addChild(thing);
         thing.x = app.renderer.width / 2;
         thing.y = app.renderer.height / 2;
         thing.lineStyle(0);
+
+
 
         container.mask = thing;
 
@@ -82,12 +88,12 @@ function init_pixi_video(){
 
             thing.clear();
             thing.beginFill(0x8bc5ff, 0.4);
-            thing.moveTo(-sizing + Math.sin(count) * 20, -sizing + Math.cos(count)* 20);
-            thing.lineTo(sizing + Math.cos(count) * 20, -sizing + Math.sin(count)* 20);
-            thing.lineTo(sizing + Math.sin(count) * 20, sizing + Math.cos(count)* 20);
-            thing.lineTo(-sizing + Math.cos(count)* 20, sizing + Math.sin(count)* 20);
-            thing.rotation = count * 0.1;
+            thing.moveTo(-sizing + Math.sin(count) * 20, -sizing + Math.cos(count) * 20);
+            thing.lineTo(sizing + Math.cos(count) * 20, -sizing + Math.sin(count) * 20);
+            thing.lineTo(sizing + Math.sin(count) * 20, sizing + Math.cos(count) * 20);
+            thing.lineTo(-sizing + Math.cos(count) * 20, sizing + Math.sin(count) * 20);
 
-        });         
+            thing.rotation = count * 0.1;
+        });
     }
 }
