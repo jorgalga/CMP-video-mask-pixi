@@ -1,20 +1,20 @@
 document.addEventListener("DOMContentLoaded", function(event) {
     //launch component 
     init_pixi_video();
+
+
 });
 
 function init_pixi_video() {
-    var video_w = 16;
-    var video_h = 9;
+    var video_w = 2400;
+    var video_h = 1280;
     var ratio = video_h / video_w;
+    console.log(ratio);
 
-    var app = new PIXI.Application(window.innerWidth, Math.trunc(720 * ratio), { transparent: true });
+    var app = new PIXI.Application(window.innerWidth, window.innerWidth * ratio, { transparent: true });
     document.getElementById("cmp-video-mask").appendChild(app.view);
-
-
     app.stage.interactive = true;
 
-    this.renderer = PIXI.autoDetectRenderer(window.innerWidth, Math.trunc(720 * ratio), { antialias: true });
 
     // Create play button that can be used to trigger the video
     var button = new PIXI.Graphics()
@@ -57,7 +57,7 @@ function init_pixi_video() {
         var video = document.createElement("video");
         video.preload = "auto";
         video.loop = true; // enable looping
-        video.src = "video/optimus_720.mp4";
+        video.src = "video/test.m4v";
 
         var texture = PIXI.Texture.fromVideo(video);
 
@@ -75,11 +75,17 @@ function init_pixi_video() {
         app.stage.addChild(thing);
         thing.x = app.renderer.width / 2;
         thing.y = app.renderer.height / 2;
+
+        thing.x = 0;
+        thing.y = 0;
+
         thing.lineStyle(0);
-
-
-
         container.mask = thing;
+
+        var multi_DEST = [0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.0];
+
+        var multi_ALIG = [0.80, 0.85, 0.85, 0.90, 0.90, 0.95, 0.95, 1.0];
+
 
         var sizing = 200;
         var count = 0;
@@ -88,12 +94,42 @@ function init_pixi_video() {
 
             thing.clear();
             thing.beginFill(0x8bc5ff, 0.4);
-            thing.moveTo(-sizing + Math.sin(count) * 20, -sizing + Math.cos(count) * 20);
+            /*thing.moveTo(-sizing + Math.sin(count) * 20, -sizing + Math.cos(count) * 20);
             thing.lineTo(sizing + Math.cos(count) * 20, -sizing + Math.sin(count) * 20);
             thing.lineTo(sizing + Math.sin(count) * 20, sizing + Math.cos(count) * 20);
             thing.lineTo(-sizing + Math.cos(count) * 20, sizing + Math.sin(count) * 20);
+            */
 
-            thing.rotation = count * 0.1;
+            thing.moveTo(0, 0);
+            thing.lineTo(app.renderer.width, 0);
+
+            //DEFAULT
+            /*
+            thing.lineTo(app.renderer.width, app.renderer.height * 0.65);
+            thing.lineTo(app.renderer.width * 0.75, app.renderer.height * 0.70);
+            thing.lineTo(app.renderer.width * 0.75, app.renderer.height * 0.75);
+            thing.lineTo(app.renderer.width * 0.50, app.renderer.height * 0.80);
+            thing.lineTo(app.renderer.width * 0.50, app.renderer.height * 0.85);
+            thing.lineTo(app.renderer.width * 0.25, app.renderer.height * 0.90);
+            thing.lineTo(app.renderer.width * 0.25, app.renderer.height * 0.95);
+            */
+            //AFTER SCROLL
+
+            thing.lineTo(app.renderer.width, app.renderer.height * multi_ALIG[0]);
+            thing.lineTo(app.renderer.width * 0.75, app.renderer.height * multi_ALIG[1]);
+            thing.lineTo(app.renderer.width * 0.75, app.renderer.height * multi_ALIG[2]);
+            thing.lineTo(app.renderer.width * 0.50, app.renderer.height * multi_ALIG[3]);
+            thing.lineTo(app.renderer.width * 0.50, app.renderer.height * multi_ALIG[4]);
+            thing.lineTo(app.renderer.width * 0.25, app.renderer.height * multi_ALIG[5]);
+            thing.lineTo(app.renderer.width * 0.25, app.renderer.height * multi_ALIG[6]);
+            thing.lineTo(app.renderer.width * 0, app.renderer.height * multi_ALIG[7]);
+
+            //thing.lineTo(-sizing + Math.cos(count) * 20, sizing + Math.sin(count) * 20);
+            //thing.rotation = count * 0.1;
+
         });
     }
+    document.addEventListener("scroll", function(e) {
+        console.log(window.scrollY);
+    });
 }
